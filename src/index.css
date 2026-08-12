@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600&family=Noto+Serif+Devanagari:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-heading: 'Playfair Display', 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', serif;
+  --font-deva: 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', serif;
+  --font-body: 'Inter', sans-serif;
+  --color-saffron: #DE651A;
+  --color-saffron-deep: #C0550A;
+  --color-saffron-light: #FF8C38;
+  --color-saffron-bg: #FFF3E8;
+  --color-gold: #B8973A;
+  --color-gold-light: #D4B86A;
+  --color-gold-bg: #FDF6E3;
+  --color-ivory: #FFFEFC;
+  --color-ivory-dark: #FFF9F2;
+  --color-ink: #1A1100;
+  --color-ink-soft: #3A3020;
+  --color-ink-muted: #7A6F5A;
+  --color-border: #E8E0D4;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+::selection { background: var(--color-saffron); color: white; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-ivory); }
+::-webkit-scrollbar-thumb { background: var(--color-saffron); border-radius: 2px; }
+
+/* ─── Design System ─────────────────────────── */
+
+/* Buttons */
+.btn-saffron {
+  background: linear-gradient(135deg, var(--color-saffron), var(--color-saffron-deep));
+  color: white;
+  font-weight: 600;
+  border-radius: 2px;
+  padding: 12px 24px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.25s;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-saffron:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 15px rgba(222, 101, 26, 0.3);
+}
+
+/* Form inputs */
+.input-field {
+  width: 100%;
+  border: 1px solid var(--color-border);
+  background: white;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--color-ink);
+  transition: border-color 0.2s;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--color-saffron);
+}
+.input-field::placeholder {
+  color: rgba(122, 111, 90, 0.35);
+}
+
+/* Tabs */
+.tab-btn {
+  padding: 10px 24px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.tab-btn.active {
+  background: var(--color-saffron);
+  color: white;
+}
+.tab-btn.inactive {
+  background: transparent;
+  color: var(--color-ink-muted);
+}
+.tab-btn.inactive:hover {
+  color: var(--color-ink);
+}
+
+/* Section divider */
+.section-divider {
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--color-saffron), transparent);
+}
