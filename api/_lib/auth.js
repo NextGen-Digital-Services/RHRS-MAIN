@@ -1,7 +1,8 @@
 import { jwtVerify, SignJWT } from 'jose'
 
 function secret() {
-  return new TextEncoder().encode(process.env.JWT_SECRET || 'dev-secret-change-me')
+  if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET environment variable is not set')
+  return new TextEncoder().encode(process.env.JWT_SECRET)
 }
 
 export async function signAdminToken() {
