@@ -32,7 +32,15 @@ create table if not exists members (
   address text not null,
   blood_group text not null,
   emergency_contact text not null,
-  created_at timestamptz not null default now()
+  designation_level text,
+  designation_title text,
+  designation_state text,
+  designation_number text,
+  created_at timestamptz not null default now(),
+  check (
+    designation_level in ('national', 'zonal', 'state', 'district', 'constituency', 'mandal', 'mahila_morcha', 'yuva_morcha')
+    or designation_level is null
+  )
 );
 
 -- Appointments (Appointment Letter)

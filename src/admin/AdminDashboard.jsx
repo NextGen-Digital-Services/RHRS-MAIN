@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import GalleryManager from './GalleryManager'
 import RecordsView from './RecordsView'
+import MembersView from './MembersView'
 
 export default function AdminDashboard({ token, onLogout }) {
   const [tab, setTab] = useState('gallery')
@@ -30,12 +31,17 @@ export default function AdminDashboard({ token, onLogout }) {
           <button onClick={() => setTab('gallery')} className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer rounded-sm ${tab === 'gallery' ? 'bg-saffron text-white shadow-sm' : 'text-ink-muted hover:text-ink'}`}>
             ◈ Gallery
           </button>
+          <button onClick={() => setTab('members')} className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer rounded-sm ${tab === 'members' ? 'bg-saffron text-white shadow-sm' : 'text-ink-muted hover:text-ink'}`}>
+            ◆ Members
+          </button>
           <button onClick={() => setTab('records')} className={`px-5 py-2.5 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer rounded-sm ${tab === 'records' ? 'bg-saffron text-white shadow-sm' : 'text-ink-muted hover:text-ink'}`}>
             ▣ Records
           </button>
         </div>
 
-        {tab === 'gallery' ? <GalleryManager token={token} /> : <RecordsView token={token} />}
+        {tab === 'gallery' && <GalleryManager token={token} />}
+        {tab === 'members' && <MembersView token={token} />}
+        {tab === 'records' && <RecordsView token={token} />}
       </div>
     </div>
   )

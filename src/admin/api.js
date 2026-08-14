@@ -10,6 +10,9 @@ export const updateGalleryPhoto = (token, id, payload) => sendJSON(`/api/admin/g
 export const deleteGalleryPhoto = (token, id) => sendJSON(`/api/admin/gallery/${id}`, 'DELETE', {}, token)
 export const getUploadUrl = (token, filename) => sendJSON('/api/admin/upload-url', 'POST', { filename }, token)
 export const getRecords = (token) => getJSON('/api/admin/records', token)
+export const searchMembers = (token, q) => sendJSON('/api/admin/members', 'POST', { q }, token)
+export const assignDesignation = (token, id, payload) => sendJSON(`/api/admin/members/${id}/designation`, 'POST', payload, token)
+export const removeDesignation = (token, id) => sendJSON(`/api/admin/members/${id}/designation`, 'DELETE', {}, token)
 
 export async function uploadToSignedUrl(signedUrl, file) {
   const res = await fetch(signedUrl, {
