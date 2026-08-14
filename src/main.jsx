@@ -6,6 +6,7 @@ import App from './App.jsx'
 import AboutPage from './pages/AboutPage.jsx'
 import ServicesPage from './pages/ServicesPage.jsx'
 import GalleryPage from './pages/GalleryPage.jsx'
+import NotFoundPage from './pages/NotFoundPage.jsx'
 
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx'))
 
@@ -44,7 +45,7 @@ createRoot(document.getElementById('root')).render(
             </Suspense>
           }
         />
-        <Route path="*" element={<App />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
