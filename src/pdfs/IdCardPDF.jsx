@@ -307,9 +307,14 @@ export default function IdCardPDF({ data }) {
             <DetailRow label="Designation" labelDeva="पद" value={designationValue} />
           </View>
           <View style={[styles.detailRow, { top: P(hasDesignation ? 104 : 108) }]}>
-            <DetailRow label="Member ID" labelDeva="सदस्य क्रमांक" value={hasDesignation ? data.designation_number : memberId} mono />
+            <DetailRow label="Member ID" labelDeva="सदस्य क्रमांक" value={memberId} mono />
           </View>
-          <View style={[styles.detailRow, { top: P(hasDesignation ? 114 : 120) }]}>
+          {hasDesignation && (
+            <View style={[styles.detailRow, { top: P(114) }]}>
+              <DetailRow label="Designation No" labelDeva="पद क्रमांक" value={data.designation_number} mono />
+            </View>
+          )}
+          <View style={[styles.detailRow, { top: P(hasDesignation ? 124 : 120) }]}>
             <DetailRow label="Blood Group" labelDeva="रक्त समूह" value={data?.blood_group || '—'} />
           </View>
           <View style={[styles.detailRow, { top: P(hasDesignation ? 124 : 132) }]}>
