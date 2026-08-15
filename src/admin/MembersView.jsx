@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { searchMembers, assignDesignation, removeDesignation } from './api'
 import { DESIGNATION_LEVELS, DESIGNATION_LABELS } from './designations'
 import { pdfUrl } from '../pdfs/utils'
@@ -207,73 +207,77 @@ export default function MembersView({ token }) {
               </thead>
               <tbody>
                 {members.map((m) => (
-                  <MemberRow key={m.id} member={m} selected={selected?.id === m.id} onSelect={handleSelect} />
+                  <Fragment key={m.id}>
+                    <MemberRow member={m} selected={selected?.id === m.id} onSelect={handleSelect} />
+                    {selected?.id === m.id && (
+                      <tr className="bg-saffron-bg/40 border-b border-saffron/20">
+                        <td colSpan={5} className="px-5 py-4">
+                          <form onSubmit={handleSave} className="space-y-4">
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                              <p className="text-[11px] font-bold text-ink uppercase tracking-wider">
+                                Assign Designation
+                              </p>
+                              <span className="text-xs font-mono text-saffron">
+                                {selected.full_name} · {selected.member_id}
+                              </span>
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                              <div>
+                                <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">Designation Level</label>
+                                <select className="input-field" value={form.designation_level} onChange={(e) => setForm({ ...form, designation_level: e.target.value })}>
+                                  {DESIGNATION_LEVELS.map((l) => (
+                                    <option key={l} value={l}>{DESIGNATION_LABELS[l]}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div>
+                                <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">State / Region</label>
+                                <input type="text" className="input-field" placeholder="e.g. Maharashtra (optional)" value={form.designation_state} onChange={(e) => setForm({ ...form, designation_state: e.target.value })} />
+                              </div>
+                            </div>
+                            <div>
+                              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">Designation Title (required)</label>
+                              <input type="text" required className="input-field" placeholder="e.g. State President, Zonal Coordinator…" value={form.designation_title} onChange={(e) => setForm({ ...form, designation_title: e.target.value })} />
+                            </div>
+                            {saveError && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-sm px-3 py-2">⚠ {saveError}</p>}
+                            <div className="flex flex-wrap gap-3">
+                              <button type="submit" className="btn-saffron" disabled={saving}>
+                                {saving ? 'Saving…' : '✓ Assign Designation'}
+                              </button>
+                              {selected.designation_level && (
+                                <button type="button" onClick={handleRemove} disabled={saving} className="border border-red-300 text-red-600 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-red-600 hover:text-white transition-all cursor-pointer">
+                                  Remove Designation
+                                </button>
+                              )}
+                              <button type="button" onClick={handlePdf} disabled={pdfBusy} className="border border-saffron/40 text-saffron text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-saffron hover:text-white transition-all cursor-pointer">
+                                {pdfBusy ? 'Preparing…' : '⬇ ID Card PDF'}
+                              </button>
+                            </div>
+                            {selected.designation_number && (
+                              <p className="text-xs text-ink-muted">
+                                Designation No: <span className="font-mono font-bold text-ink">{selected.designation_number}</span> · ID Card par print hoga
+                              </p>
+                            )}
+                            {pdf && (
+                              <div className="flex flex-wrap gap-3 items-center">
+                                <a href={pdf} download={`RHRS-ID-${selected.member_id}.pdf`} className="btn-saffron">⬇ Download PDF</a>
+                                <a href={pdf} target="_blank" rel="noreferrer" className="border border-saffron/40 text-saffron text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-saffron hover:text-white transition-all cursor-pointer">
+                                  Preview / Print
+                                </a>
+                                <span className="text-[11px] text-ink-muted">Designation ke sath fresh ID card (photo box khali hoga — online photo DB me save nahi hoti).</span>
+                              </div>
+                            )}
+                          </form>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
                 ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
-
-      {selected && (
-        <div className="bg-white border border-saffron/40 rounded-sm overflow-hidden">
-          <div className="px-5 py-4 bg-saffron-bg border-b border-saffron/20 flex justify-between items-center">
-            <h3 className="font-heading text-sm font-bold text-ink">Assign Designation</h3>
-            <span className="text-xs font-mono text-saffron">
-              {selected.full_name} · {selected.member_id}
-            </span>
-          </div>
-          <form className="p-5 space-y-4" onSubmit={handleSave}>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">Designation Level</label>
-                <select className="input-field" value={form.designation_level} onChange={(e) => setForm({ ...form, designation_level: e.target.value })}>
-                  {DESIGNATION_LEVELS.map((l) => (
-                    <option key={l} value={l}>{DESIGNATION_LABELS[l]}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">State / Region</label>
-                <input type="text" className="input-field" placeholder="e.g. Maharashtra (optional)" value={form.designation_state} onChange={(e) => setForm({ ...form, designation_state: e.target.value })} />
-              </div>
-            </div>
-            <div>
-              <label className="text-xs font-semibold text-ink-muted uppercase tracking-wider block mb-1.5">Designation Title (required)</label>
-              <input type="text" required className="input-field" placeholder="e.g. State President, Zonal Coordinator…" value={form.designation_title} onChange={(e) => setForm({ ...form, designation_title: e.target.value })} />
-            </div>
-            {saveError && <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-sm px-3 py-2">⚠ {saveError}</p>}
-            <div className="flex flex-wrap gap-3">
-              <button type="submit" className="btn-saffron" disabled={saving}>
-                {saving ? 'Saving…' : '✓ Assign Designation'}
-              </button>
-              {selected.designation_level && (
-                <button type="button" onClick={handleRemove} disabled={saving} className="border border-red-300 text-red-600 text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-red-600 hover:text-white transition-all cursor-pointer">
-                  Remove Designation
-                </button>
-              )}
-              <button type="button" onClick={handlePdf} disabled={pdfBusy} className="border border-saffron/40 text-saffron text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-saffron hover:text-white transition-all cursor-pointer">
-                {pdfBusy ? 'Preparing…' : '⬇ ID Card PDF'}
-              </button>
-            </div>
-            {selected.designation_number && (
-              <p className="text-xs text-ink-muted">
-                Designation No: <span className="font-mono font-bold text-ink">{selected.designation_number}</span> · ID Card par print hoga
-              </p>
-            )}
-          </form>
-        </div>
-      )}
-
-      {pdf && (
-        <div className="bg-white border border-border rounded-sm p-5 flex flex-wrap gap-3 items-center">
-          <a href={pdf} download={`RHRS-ID-${selected.member_id}.pdf`} className="btn-saffron">⬇ Download PDF</a>
-          <a href={pdf} target="_blank" rel="noreferrer" className="border border-saffron/40 text-saffron text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-sm hover:bg-saffron hover:text-white transition-all cursor-pointer">
-            Preview / Print
-          </a>
-          <span className="text-[11px] text-ink-muted">Designation ke sath fresh ID card (photo box khali hoga — online photo DB me save nahi hoti).</span>
-        </div>
-      )}
     </div>
   )
 }
