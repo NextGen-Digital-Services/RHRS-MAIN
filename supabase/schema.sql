@@ -77,6 +77,14 @@ create table if not exists parikshan_registrations (
   created_at timestamptz not null default now()
 );
 
+-- Admin credentials (DB fallback when env vars are not set / differ)
+create table if not exists admin_config (
+  id uuid primary key default gen_random_uuid(),
+  username text not null,
+  password text not null,
+  created_at timestamptz not null default now()
+);
+
 -- Gallery photos (managed from admin panel)
 create table if not exists gallery_photos (
   id uuid primary key default gen_random_uuid(),
@@ -102,3 +110,4 @@ alter table payments enable row level security;
 alter table parikshan_registrations enable row level security;
 alter table gallery_photos enable row level security;
 alter table sequences enable row level security;
+alter table admin_config enable row level security;
